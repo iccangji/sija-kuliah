@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Schedules;
 use App\Http\Requests\StoreSchedulesRequest;
 use App\Http\Requests\UpdateSchedulesRequest;
+use App\Imports\ImportSchedules;
 use App\Models\Courses;
 use App\Models\Lecturers;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class SchedulesController extends Controller
 {
@@ -41,7 +43,6 @@ class SchedulesController extends Controller
                 'd1.nama as dosen1',
                 'd2.nama as dosen2',
                 'd3.nama as dosen3',
-                'tipe'
             )
             ->join('courses', 'schedules.kode', 'courses.kode')
             ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
@@ -85,7 +86,6 @@ class SchedulesController extends Controller
                 'd1.nama as dosen1',
                 'd2.nama as dosen2',
                 'd3.nama as dosen3',
-                'tipe'
             )
             ->join('courses', 'schedules.kode', 'courses.kode')
             ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
@@ -169,7 +169,6 @@ class SchedulesController extends Controller
             'd1.nama as dosen1',
             'd2.nama as dosen2',
             'd3.nama as dosen3',
-            'tipe'
         )
         ->join('courses', 'schedules.kode', 'courses.kode')
         ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
@@ -317,6 +316,70 @@ class SchedulesController extends Controller
     {
         Schedules::find($id)->delete();
         session()->flash('success', 'Data berhasil dihapus');
+        return redirect('/');
+    }
+
+    public function upload(){
+        return view('upload', [
+            'title' => 'Sistem Informasi Penjadwalan Kuliah | Unggah Jadwal',
+            'sidebar' => 'dasbor',
+            'header' => 'Unggah Jadwal',
+            'user' => auth()->user()->name,
+            'back' => '/'
+        ] 
+        );        
+    }
+
+    public function import(Request $request){
+        $dataInput = Excel::toArray(new ImportSchedules, $request->file('file'))[0];
+
+        try {
+            $data = [];
+            for($i = 1; $i<count($dataInput);$i++){
+                $day = 0;
+                switch(strtolower($dataInput[$i][6])){
+                    case 'senin':
+                        $day = 1;
+                        break;
+                    case 'selasa':
+                        $day = 2;
+                        break;
+                    case 'rabu':
+                        $day = 3;
+                        break;
+                    case 'kamis':
+                        $day = 4;
+                        break;
+                    case 'jumat':
+                        $day = 5;
+                        break;
+                    default:
+                        $day = 0;
+                }
+                $data[] = [
+                    "kode" => $dataInput[$i][1],
+                    "mahasiswa" => $dataInput[$i][4],
+                    "kelas" => $dataInput[$i][5],
+                    "hari" => $day,
+                    "jam" => $dataInput[$i][7],
+                    "ruang" => $dataInput[$i][8],
+                    "dosen1" => $dataInput[$i][9],
+                    "dosen2" => $dataInput[$i][10],
+                    "dosen3" => $dataInput[$i][11],
+                ];
+            }
+            if($request->has('delete-data')){
+                Schedules::truncate();
+            }
+            foreach($data as $item){
+                Schedules::create($item);
+            }
+        } catch (Throwable $e) {
+            session()->flash('eror', 'Data tidak dapat dimasukkan. Format tidak sesuai atau terdapat data ganda');
+            redirect()->back();
+        }
+        
+        session()->flash('success', 'Data berhasil diunggah');
         return redirect('/');
     }
 }

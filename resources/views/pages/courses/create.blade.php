@@ -14,7 +14,7 @@
   <div class="daily-schedule w-100">
     <div class="card-header pb-0 align-items-top">
       <div class="p-2 flex-grow-1">
-        <a class="nav-link d-flex align-items-center" href="/pergajar">
+        <a class="nav-link d-flex align-items-center" href="/mata-kuliah">
           <i class="fa fa-chevron-left" aria-hidden="true"></i>
           <div class="text-sm ms-3">Kembali</div>
         </a>
@@ -35,13 +35,6 @@
           <input name="sks" type="number" class="form-control" id="floatingInput" placeholder="Mahasiswa" required>
           <label for="floatingInput">SKS</label>
         </div>
-        <select name="tipe" class="form-select mb-3" aria-label="Default select example" style="font-family: inherit" required>
-          <option selected>Pilih Peminatan</option>
-          <option value="MKU">Mata Kuliah Umum</option>  
-          <option value="RPL">Rekayasa Perangkat Lunak</option>  
-          <option value="KCV">Komputasi Cerdas dan Visualisasi</option>  
-          <option value="KBJ">Komputasi Berbasis Jaringan</option>  
-        </select>
         <button class="btn btn-primary w-100 mt-2">Tambah Mata Kuliah</button>
       </form>
       </div>

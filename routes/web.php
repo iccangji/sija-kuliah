@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\LecturersController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PagesController;
@@ -43,6 +44,12 @@ Route::post('/tambah-pengajar',[LecturersController::class, 'store'])->middlewar
 Route::get('/edit-pengajar/{id}',[LecturersController::class, 'edit'])->middleware('admin');
 Route::post('/edit-pengajar/{id}',[LecturersController::class, 'update'])->middleware('admin');
 Route::get('/delete-pengajar/{id}',[LecturersController::class, 'destroy'])->middleware('admin');
+Route::get('/upload-jadwal',[SchedulesController::class, 'upload'])->middleware('admin');
+Route::post('/upload-jadwal',[SchedulesController::class, 'import'])->middleware('admin');
+Route::get('/upload-mata-kuliah',[CoursesController::class, 'upload'])->middleware('admin');
+Route::post('/upload-mata-kuliah',[CoursesController::class, 'import'])->middleware('admin');
+Route::get('/upload-pengajar',[LecturersController::class, 'upload'])->middleware('admin');
+Route::post('/upload-pengajar',[LecturersController::class, 'import'])->middleware('admin');
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);

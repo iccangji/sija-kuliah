@@ -39,17 +39,6 @@
           <input name="sks" value="{{$course['sks']}}" type="number" class="form-control" id="floatingInput" placeholder="Mahasiswa" required>
           <label for="floatingInput">SKS</label>
         </div>
-        <select name="tipe" class="form-select mb-3" aria-label="Default select example" style="font-family: inherit" required>
-          <option value="MKU" @if ($course['tipe'] == 'MKU')
-              selected
-          @endif>Mata Kuliah Umum</option>  
-          <option value="RPL" @if ($course['tipe'] == 'RPL')
-          selected @endif>Rekayasa Perangkat Lunak</option>  
-          <option value="KCV" @if ($course['tipe'] == 'KCV')
-          selected @endif>Komputasi Cerdas dan Visualisasi</option>  
-          <option value="KBJ" @if ($course['tipe'] == 'KBJ')
-          selected @endif>Komputasi Berbasis Jaringan</option>  
-        </select>
         <button class="btn btn-primary w-100 mt-2">Edit Mata Kuliah</button>
       </form>
       </div>

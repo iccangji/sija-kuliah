@@ -15,7 +15,6 @@ return new class extends Migration
             $table->increments('id');
             $table->string('kode')->unique();
             $table->string('nama');
-            $table->string('tipe');
             $table->string('sks');
             $table->timestamps();
         });

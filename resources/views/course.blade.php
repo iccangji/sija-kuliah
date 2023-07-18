@@ -16,7 +16,10 @@
         @if (auth()->user()->level=='admin')
         <span class="mt-2 d-flex align-items-end">
           <a href="/tambah-mata-kuliah">
-            <button class="btn btn-primary py-2"><i class="fa fa-plus me-2" aria-hidden="true"></i> Tambah Mata Kuliah</button>
+            <button class="btn btn-primary py-2 px-3"><i class="fa fa-plus" aria-hidden="true"></i></button>
+          </a>
+          <a href="/upload-mata-kuliah">
+            <button class="btn btn-info py-2 px-3 ms-3"><i class="fa fa-upload" aria-hidden="true"></i></button>
           </a>
         </span>
         @endif
@@ -59,11 +62,6 @@
                   SKS
                 </div>
               </td>
-              <td class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" scope="col">
-                <div class="text-start text-wrap">
-                  Peminatan
-                </div>
-              </td>
               @if (auth()->user()->level=='admin')
                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" scope="col">
                   <div class="text-start text-wrap">
@@ -87,19 +85,6 @@
                 </td>
                 <td>
                   <div class="text-xs text-wrap word-break">{{$courses[$i]['sks']}}</div>
-                </td>
-                <td>
-                  <div class="text-xs text-wrap word-break">
-                    @if ($courses[$i]['tipe'] == 'KCV')
-                        {{'Komputasi Cerdas dan Visualisasi'}}
-                    @elseif ($courses[$i]['tipe'] == 'RPL')
-                        {{'Rekayasa Perangkat Lunak'}}
-                    @elseif ($courses[$i]['tipe'] == 'MKU')
-                        {{'Komputasi Berbasis Jaringan'}}
-                    @else
-                        {{'Mata Kuliah Umum'}}
-                    @endif
-                  </div>
                 </td>
                 @if (auth()->user()->level=='admin')
                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" scope="col">

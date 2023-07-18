@@ -16,7 +16,10 @@
           <h6 class="my-0">Jadwal Perkuliahan</h6>
           <span class="mt-2 d-flex align-items-end">
             <a href="/tambah-jadwal">
-              <button class="btn btn-primary py-2"><i class="fa fa-plus me-2" aria-hidden="true"></i> Tambah jadwal</button>
+              <button class="btn btn-primary py-2 px-3"><i class="fa fa-plus" aria-hidden="true"></i></button>
+            </a>
+            <a href="/upload-jadwal">
+              <button class="btn btn-info py-2 px-3 ms-3"><i class="fa fa-upload" aria-hidden="true"></i></button>
             </a>
           </span>
         </div>

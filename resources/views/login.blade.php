@@ -27,7 +27,7 @@
             <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" aria-label="Password" aria-describedby="password-addon" required>
           </div>
           <div class="form-check form-switch">
-            <input class="form-check-input" name="rememberMe" type="checkbox" id="rememberMe" value="1" checked="">
+            <input class="form-check-input" name="rememberMe" type="checkbox" id="rememberMe" value="1">
             <label class="form-check-label" for="rememberMe">Remember me</label>
           </div>
           <div class="text-center">

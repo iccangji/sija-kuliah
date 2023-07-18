@@ -16,7 +16,10 @@
     @if (auth()->user()->level=='admin')
     <span class="mt-2 d-flex align-items-end">
       <a href="/tambah-pengajar">
-        <button class="btn btn-primary py-2"><i class="fa fa-plus me-2" aria-hidden="true"></i> Tambah Pengajar</button>
+        <button class="btn btn-primary py-2 px-3"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </a>
+      <a href="/upload-pengajar">
+        <button class="btn btn-info py-2 px-3 ms-3"><i class="fa fa-upload" aria-hidden="true"></i></button>
       </a>
     </span>
     @endif

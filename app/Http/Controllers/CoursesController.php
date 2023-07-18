@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Courses;
 use App\Http\Requests\StoreCoursesRequest;
 use App\Http\Requests\UpdateCoursesRequest;
+use App\Imports\ImportSchedules;
 use App\Models\Schedules;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use Throwable;
 
 class CoursesController extends Controller
 {
@@ -64,7 +67,6 @@ class CoursesController extends Controller
             'kode' => 'unique:courses',
             'nama' => '',
             'sks' => '',
-            'tipe' => '',
         ]);
         Courses::create($data);
         $request->session()->flash('success', 'Data berhasil ditambahkan');
@@ -105,7 +107,6 @@ class CoursesController extends Controller
             'kode' => '',
             'nama' => '',
             'sks' => '',
-            'tipe' => '',
         ]);
         Courses::where('id',$data['id'])->update($data);
         $request->session()->flash('success', 'Data berhasil diubah');
@@ -119,6 +120,45 @@ class CoursesController extends Controller
     {
         Courses::findOrFail($id)->delete();
         session()->flash('success', 'Data berhasil dihapus');
+        return redirect('/mata-kuliah');
+    }
+
+    public function upload(){
+        return view('upload', [
+            'title' => 'Sistem Informasi Penjadwalan Kuliah | Unggah Mata Kuliah',
+            'sidebar' => 'mata-kuliah',
+            'header' => 'Unggah Mata Kuliah',
+            'user' => auth()->user()->name,
+            'back' => '/mata-kuliah'
+        ] 
+        );        
+    }
+
+    public function import(Request $request){
+        $dataInput = Excel::toArray(new ImportSchedules, $request->file('file'))[0];
+        $data = [];
+
+        try{
+            for($i = 1; $i<count($dataInput);$i++){
+                $data[] = [
+                    "kode" => $dataInput[$i][1],
+                    "nama" => $dataInput[$i][2],
+                    "sks" => $dataInput[$i][3],
+                ];
+            }
+
+            if($request->has('delete-data')){
+                Courses::truncate();
+            }
+
+            foreach($data as $item){
+                Courses::create($item);
+            }
+        }catch(Throwable $e){
+            session()->flash('error', 'Data tidak dapat dimasukkan. Format tidak sesuai atau terdapat data ganda');
+            return redirect()->back();
+        }
+        session()->flash('success', 'Data berhasil diunggah');
         return redirect('/mata-kuliah');
     }
 }
