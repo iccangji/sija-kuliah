@@ -17,31 +17,56 @@ class CoursesController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   
         $courses = Courses::all()->toArray();
-        return view('course', [
-            'title' => 'Sistem Informasi Penjadwalan Kuliah | Mata Kuliah',
-            'sidebar' => 'mata-kuliah',
-            'header' => 'Mata Kuliah',
-            'user' => auth()->user()->name,
-            'courses' => $courses,
-            'query' => ''
+        if(auth()->user()){
+            return view('course', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah | Mata Kuliah',
+                'sidebar' => 'mata-kuliah',
+                'header' => 'Mata Kuliah',
+                'user' => auth()->user()->name,
+                'courses' => $courses,
+                'query' => ''
+                ] 
+            );
+            }
+        else{
+            $courses = Courses::all()->toArray();
+            return view('/guest/course', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
+                'sidebar' => 'mata-kuliah',
+                'header' => 'Jadwal Perkuliahan',
+                'courses' => $courses,
+                'query' => ''
             ] 
-        );
+            );
+        }
     }
 
     public function search(Request $request){
         $query = $request->search;
         $courses = Courses::where('nama', 'like', '%'.$query.'%')->get()->toArray();
-        return view('course', [
-            'title' => 'Sistem Informasi Penjadwalan Kuliah | Mata Kuliah',
-            'sidebar' => 'mata-kuliah',
-            'header' => 'Mata Kuliah',
-            'user' => auth()->user()->name,
-            'courses' => $courses,
-            'query' => $query
-            ] 
-        );
+        if(auth()->user()){
+            return view('course', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah | Mata Kuliah',
+                'sidebar' => 'mata-kuliah',
+                'header' => 'Mata Kuliah',
+                'user' => auth()->user()->name,
+                'courses' => $courses,
+                'query' => $query
+                ] 
+            );
+        }
+        else{
+            return view('guest/course', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
+                'sidebar' => 'mata-kuliah',
+                'header' => 'Mata Kuliah',
+                'courses' => $courses,
+                'query' => $query
+                ] 
+            );
+        }
     }
 
     /**
@@ -156,7 +181,7 @@ class CoursesController extends Controller
             }
         }catch(Throwable $e){
             session()->flash('error', 'Data tidak dapat dimasukkan. Format tidak sesuai atau terdapat data ganda');
-            return redirect()->back();
+            // return redirect()->back();
         }
         session()->flash('success', 'Data berhasil diunggah');
         return redirect('/mata-kuliah');

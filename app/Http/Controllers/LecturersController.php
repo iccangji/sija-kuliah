@@ -18,28 +18,52 @@ class LecturersController extends Controller
     public function index()
     {
         $lecturer = Lecturers::all()->toArray();
-        return view('lecturer', [
-            'title' => 'Sistem Informasi Penjadwalan Kuliah | Mata Kuliah',
-            'sidebar' => 'pengajar',
-            'header' => 'Pengajar',
-            'user' => auth()->user()->name,
-            'lecturer' => $lecturer,
-            'query' => ''
-        ]);
+        if(auth()->user()){
+            return view('lecturer', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah | Mata Kuliah',
+                'sidebar' => 'pengajar',
+                'header' => 'Pengajar',
+                'user' => auth()->user()->name,
+                'lecturer' => $lecturer,
+                'query' => ''
+            ]);
+        }
+        else{
+            return view('/guest/lecturer', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
+                'sidebar' => 'pengajar',
+                'header' => 'Pengajar',
+                'lecturer' => $lecturer,
+                'query' => ''
+            ] 
+            );
+        }
     }
 
     public function search(Request $request){
         $query = $request->search;
         $lecturers = Lecturers::where('nama', 'like', '%'.$query.'%')->get()->toArray();
-        return view('lecturer', [
-            'title' => 'Sistem Informasi Penjadwalan Kuliah | Pengajar',
-            'sidebar' => 'pengajar',
-            'header' => 'Pengajar',
-            'user' => auth()->user()->name,
-            'lecturer' => $lecturers,
-            'query' => $query
-            ] 
-        );
+        if(auth()->user()){
+            return view('lecturer', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah | Pengajar',
+                'sidebar' => 'pengajar',
+                'header' => 'Pengajar',
+                'user' => auth()->user()->name,
+                'lecturer' => $lecturers,
+                'query' => $query
+                ] 
+            );
+        }
+        else{
+            return view('guest/lecturer', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
+                'sidebar' => 'pengajar',
+                'header' => 'Pengajar',
+                'lecturer' => $lecturers,
+                'query' => $query
+                ] 
+            );
+        }
     }
 
     /**

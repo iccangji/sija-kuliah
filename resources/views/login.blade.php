@@ -3,8 +3,9 @@
 @section('container')
 
 <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
-    <div class="card card-plain mt-8">
+    <div class="card card-plain mt-2">
       <div class="card-header pb-0 text-left bg-transparent">
+        <img src="../assets/img/uho.png" alt="" class="logo">
         <h4 class="font-weight-bolder text-info">Sistem Informasi<br>Jadwal Perkuliahan<br>Teknik Informatika UHO</h4>
       </div>
       <div class="card-body">
@@ -45,7 +46,7 @@
   </div>
   <div class="col-md-6">
     <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-      <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('../assets/img/curved-images/plaza-teknik.jpg')"></div>
+      <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('../assets/img/plaza-teknik.jpg')"></div>
     </div>
   </div>
 @endsection

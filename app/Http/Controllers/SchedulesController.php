@@ -30,132 +30,199 @@ class SchedulesController extends Controller
     public function index()
     {   
 
-        if(auth()->user()->level=='admin'){
-            $schedules = (Schedules::select(
-                'schedules.id',
-                'courses.nama as matkul',
-                'sks',
-                'hari',
-                'jam',
-                'kelas',
-                'ruang',
-                'mahasiswa',
-                'd1.nama as dosen1',
-                'd2.nama as dosen2',
-                'd3.nama as dosen3',
-            )
-            ->join('courses', 'schedules.kode', 'courses.kode')
-            ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
-            ->leftjoin('lecturers as d2', 'schedules.dosen2', 'd2.nidn')
-            ->leftjoin('lecturers as d3', 'schedules.dosen3', 'd3.nidn')
-            ->get()->toArray());
-            usort($schedules, function($a, $b){
-                if ($a['hari'] === $b['hari']) {
-                    return strcmp($a['jam'], $b['jam']);
+        if(auth()->user()){
+            if(auth()->user()->level=='admin'){
+                $schedules = (Schedules::select(
+                    'schedules.id',
+                    'courses.nama as matkul',
+                    'sks',
+                    'hari',
+                    'jam',
+                    'kelas',
+                    'ruang',
+                    'mahasiswa',
+                    'd1.nama as dosen1',
+                    'd2.nama as dosen2',
+                    'd3.nama as dosen3',
+                )
+                ->join('courses', 'schedules.kode', 'courses.kode')
+                ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
+                ->leftjoin('lecturers as d2', 'schedules.dosen2', 'd2.nidn')
+                ->leftjoin('lecturers as d3', 'schedules.dosen3', 'd3.nidn')
+                ->get()->toArray());
+                usort($schedules, function($a, $b){
+                    if ($a['hari'] === $b['hari']) {
+                        return strcmp($a['jam'], $b['jam']);
+                    }
+                    return $a['hari'] - $b['hari'];
+                });
+                for($i=0;$i<count($schedules);$i++){
+                    $schedules[$i]['hari'] = $this->day[$schedules[$i]['hari']];
                 }
-                return $a['hari'] - $b['hari'];
-            });
-            for($i=0;$i<count($schedules);$i++){
-                $schedules[$i]['hari'] = $this->day[$schedules[$i]['hari']];
+                
+                return view('dashboard', [
+                    'title' => 'Sistem Informasi Penjadwalan Kuliah | Dasbor',
+                    'sidebar' => 'dasbor',
+                    'header' => 'Jadwal Perkuliahan',
+                    'user' => auth()->user()->name,
+                    'schedules' => $schedules,
+                    'query' => ''
+                ] 
+                );
             }
-            
-            return view('dashboard', [
-                'title' => 'Sistem Informasi Penjadwalan Kuliah | Dasbor',
-                'sidebar' => 'dasbor',
-                'header' => 'Jadwal Perkuliahan',
-                'user' => auth()->user()->name,
-                'schedules' => $schedules,
-                'query' => ''
-            ] 
-            );
+            else{
+                date_default_timezone_set('Asia/Makassar');
+                $day = (date('w'));
+                $time = (floatval(date('H.i')));
+                $timeNow = date('H:i');
+    
+                $allSchedule = (Schedules::select(
+                    'courses.nama as matkul',
+                    'sks',
+                    'hari',
+                    'jam',
+                    'kelas',
+                    'ruang',
+                    'mahasiswa',
+                    'd1.nama as dosen1',
+                    'd2.nama as dosen2',
+                    'd3.nama as dosen3',
+                )
+                ->join('courses', 'schedules.kode', 'courses.kode')
+                ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
+                ->leftjoin('lecturers as d2', 'schedules.dosen2', 'd2.nidn')
+                ->leftjoin('lecturers as d3', 'schedules.dosen3', 'd3.nidn')
+                ->where('dosen1', auth()->user()->user)
+                ->orwhere('dosen2', auth()->user()->user)
+                ->orwhere('dosen3', auth()->user()->user)
+                ->get()->toArray());
+    
+                usort($allSchedule, function($a, $b){
+                    if ($a['hari'] === $b['hari']) {
+                        return strcmp($a['jam'], $b['jam']);
+                    }
+                    return $a['hari'] - $b['hari'];
+                });
+    
+                $todaySchedule = [];
+                for($i=0;$i<count($allSchedule);$i++){
+                    $otherLecturer = [];
+                    if($allSchedule[$i]['dosen1'] != auth()->user()->name){
+                        $otherLecturer[] = $allSchedule[$i]['dosen1'];
+                    }
+                    if($allSchedule[$i]['dosen2']){
+                        if($allSchedule[$i]['dosen2'] != auth()->user()->name){
+                            $otherLecturer[] = $allSchedule[$i]['dosen2'];
+                        }   
+                    }
+                    if($allSchedule[$i]['dosen3']){
+                        if($allSchedule[$i]['dosen2'] != auth()->user()->name){
+                            $otherLecturer[] = $allSchedule[$i]['dosen3'];
+                        }   
+                    }
+                    $allSchedule[$i] += array('other_lecturer' => $otherLecturer);
+                    $allSchedule[$i] += array('other_lecturer' => $otherLecturer);
+                    if($allSchedule[$i]['hari'] == $day){
+                        $allSchedule[$i]['hari'] = $this->day[$allSchedule[$i]['hari']];
+                        $todaySchedule[] = $allSchedule[$i];
+                    }else{
+                        $allSchedule[$i]['hari'] = $this->day[$allSchedule[$i]['hari']];
+                    }
+                }
+                if($todaySchedule){
+                    for($i=0;$i<count($todaySchedule);$i++){
+                        $timeStart = floatval(substr($todaySchedule[$i]['jam'], 0, 5));
+                        $timeEnd = floatval(substr($todaySchedule[$i]['jam'], 6));
+                        if ($time >= $timeStart && $time <= $timeEnd) {
+                            $status = 'running';
+                        } else if ($time <= $timeStart){
+                            $status = 'not_running';
+                        } else{
+                            $status = 'passed';
+                        }
+                        $todaySchedule[$i] += array('status' => $status);
+                    }
+                }
+                return view('dashboard', [
+                    'title' => 'Sistem Informasi Penjadwalan Kuliah | Dasbor',
+                    'sidebar' => 'dasbor',
+                    'header' => 'Jadwal Perkuliahan',
+                    'user' => auth()->user()->name,
+                    'today_schedule' => $todaySchedule,
+                    'all_schedule' => $allSchedule,
+                ] 
+                );
+            }
         }
         else{
             date_default_timezone_set('Asia/Makassar');
-            $day = (date('w'));
-            $time = (floatval(date('H.i')));
-            $timeNow = date('H:i');
-
-            $allSchedule = (Schedules::select(
-                'courses.nama as matkul',
-                'sks',
-                'hari',
-                'jam',
-                'kelas',
-                'ruang',
-                'mahasiswa',
-                'd1.nama as dosen1',
-                'd2.nama as dosen2',
-                'd3.nama as dosen3',
-            )
-            ->join('courses', 'schedules.kode', 'courses.kode')
-            ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
-            ->leftjoin('lecturers as d2', 'schedules.dosen2', 'd2.nidn')
-            ->leftjoin('lecturers as d3', 'schedules.dosen3', 'd3.nidn')
-            ->where('dosen1', auth()->user()->user)
-            ->orwhere('dosen2', auth()->user()->user)
-            ->orwhere('dosen3', auth()->user()->user)
-            ->get()->toArray());
-
-            usort($allSchedule, function($a, $b){
-                if ($a['hari'] === $b['hari']) {
-                    return strcmp($a['jam'], $b['jam']);
-                }
-                return $a['hari'] - $b['hari'];
-            });
-
-            $todaySchedule = [];
-            for($i=0;$i<count($allSchedule);$i++){
-                $otherLecturer = [];
-                if($allSchedule[$i]['dosen1'] != auth()->user()->name){
-                    $otherLecturer[] = $allSchedule[$i]['dosen1'];
-                }
-                if($allSchedule[$i]['dosen2']){
-                    if($allSchedule[$i]['dosen2'] != auth()->user()->name){
-                        $otherLecturer[] = $allSchedule[$i]['dosen2'];
-                    }   
-                }
-                if($allSchedule[$i]['dosen3']){
-                    if($allSchedule[$i]['dosen2'] != auth()->user()->name){
-                        $otherLecturer[] = $allSchedule[$i]['dosen3'];
-                    }   
-                }
-                $allSchedule[$i] += array('other_lecturer' => $otherLecturer);
-                $allSchedule[$i] += array('other_lecturer' => $otherLecturer);
-                if($allSchedule[$i]['hari'] == $day){
-                    $allSchedule[$i]['hari'] = $this->day[$allSchedule[$i]['hari']];
-                    $todaySchedule[] = $allSchedule[$i];
-                }else{
-                    $allSchedule[$i]['hari'] = $this->day[$allSchedule[$i]['hari']];
-                }
-            }
-            if($todaySchedule){
-                for($i=0;$i<count($todaySchedule);$i++){
-                    $timeStart = floatval(substr($todaySchedule[$i]['jam'], 0, 5));
-                    $timeEnd = floatval(substr($todaySchedule[$i]['jam'], 6));
-                    if ($time >= $timeStart && $time <= $timeEnd) {
-                        $status = 'running';
-                    } else if ($time <= $timeStart){
-                        $status = 'not_running';
-                    } else{
-                        $status = 'passed';
+                $day = (date('w'));
+                $time = (floatval(date('H.i')));
+                $timeNow = date('H:i');
+    
+                $allSchedule = (Schedules::select(
+                    'courses.nama as matkul',
+                    'sks',
+                    'hari',
+                    'jam',
+                    'kelas',
+                    'ruang',
+                    'mahasiswa',
+                    'd1.nama as dosen1',
+                    'd2.nama as dosen2',
+                    'd3.nama as dosen3',
+                )
+                ->join('courses', 'schedules.kode', 'courses.kode')
+                ->leftjoin('lecturers as d1', 'schedules.dosen1', 'd1.nidn')
+                ->leftjoin('lecturers as d2', 'schedules.dosen2', 'd2.nidn')
+                ->leftjoin('lecturers as d3', 'schedules.dosen3', 'd3.nidn')
+                ->get()->toArray());
+    
+                usort($allSchedule, function($a, $b){
+                    if ($a['hari'] === $b['hari']) {
+                        return strcmp($a['jam'], $b['jam']);
                     }
-                    $todaySchedule[$i] += array('status' => $status);
+                    return $a['hari'] - $b['hari'];
+                });
+
+                $todaySchedule = [];
+                for($i=0;$i<count($allSchedule);$i++){
+                    if($allSchedule[$i]['hari'] == $day){
+                        $allSchedule[$i]['hari'] = $this->day[$allSchedule[$i]['hari']];
+                        $todaySchedule[] = $allSchedule[$i];
+                    }else{
+                        $allSchedule[$i]['hari'] = $this->day[$allSchedule[$i]['hari']];
+                    }
                 }
-            }
-            return view('dashboard', [
-                'title' => 'Sistem Informasi Penjadwalan Kuliah | Dasbor',
+                if($todaySchedule){
+                    for($i=0;$i<count($todaySchedule);$i++){
+                        $timeStart = floatval(substr($todaySchedule[$i]['jam'], 0, 5));
+                        $timeEnd = floatval(substr($todaySchedule[$i]['jam'], 6));
+                        if ($time >= $timeStart && $time <= $timeEnd) {
+                            $status = 'running';
+                        } else if ($time <= $timeStart){
+                            $status = 'not_running';
+                        } else{
+                            $status = 'passed';
+                        }
+                        $todaySchedule[$i] += array('status' => $status);
+                    }
+                }
+                
+            return view('/guest/dashboard', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
                 'sidebar' => 'dasbor',
                 'header' => 'Jadwal Perkuliahan',
-                'user' => auth()->user()->name,
-                'today_schedule' => $todaySchedule,
                 'all_schedule' => $allSchedule,
+                'today_schedule' => $todaySchedule,
+                'query' => ''
             ] 
             );
         }
     }
 
     public function search(Request $request)
-    {
+    {   
         $query = $request->search;
         $schedules = (Schedules::select(
             'schedules.id',
@@ -186,15 +253,27 @@ class SchedulesController extends Controller
         for($i=0;$i<count($schedules);$i++){
             $schedules[$i]['hari'] = $this->day[$schedules[$i]['hari']];
         }
-        return view('dashboard', [
-            'title' => 'Sistem Informasi Penjadwalan Kuliah | Dasbor',
-            'sidebar' => 'dasbor',
-            'header' => 'Jadwal Perkuliahan',
-            'user' => auth()->user()->name,
-            'schedules' => $schedules,
-            'query' => $query
-        ] 
-        );
+        if(auth()->user()){
+            return view('dashboard', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah | Dasbor',
+                'sidebar' => 'dasbor',
+                'header' => 'Jadwal Perkuliahan',
+                'user' => auth()->user()->name,
+                'schedules' => $schedules,
+                'query' => $query
+            ] 
+            );
+        }
+        else{
+            return view('/guest/dashboard', [
+                'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
+                'sidebar' => 'dasbor',
+                'header' => 'Jadwal Perkuliahan',
+                'schedules' => $schedules,
+                'query' => ''
+            ] 
+            );
+        }
     }
 
     /**

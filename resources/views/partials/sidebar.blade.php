@@ -1,6 +1,10 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-white" id="sidenav-main">
     <div class="sidenav-header">
-      <h6 class="navbar-brand text-center font-weight-bold">{{$user}}</h6>
+      <h6 class="navbar-brand text-center font-weight-bold">
+        @if(auth()->user())
+          {{$user}}
+        @endif
+      </h6>
     </div>
     {{-- <hr> --}}
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
@@ -65,6 +69,7 @@
             <span class="nav-link-text ms-1">Pengajar</span>
           </a>
         </li>
+        @if(auth()->user())
         <li class="nav-item">
           <form action="/logout" method="post" class="nav-link d-flex justify-content-start">
             @csrf
@@ -88,6 +93,31 @@
           </button>
           </form>
         </li>
+        @else
+        <li class="nav-item">
+          <form action="/login" method="get" class="nav-link d-flex justify-content-start">
+            <button type="submit" class="bg-transparent border-0 p-0 me-2 d-flex align-items-center">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+              <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>credit-card</title>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <g transform="translate(1716.000000, 291.000000)">
+                      <g transform="translate(453.000000, 454.000000)">
+                        <path class="color-background opacity-12" d="M 10 42 q -1.65 0 -2.826 -1.176 T 6 38 V 10 q 0 -1.65 1.176 -2.826 T 10 6 h 14 v 4 H 10 v 28 h 14 v 4 H 10 Z m 22 -8 l -2.75 -2.9 l 5.1 -5.1 H 18 v -4 h 16.35 l -5.1 -5.1 L 32 14 l 10 10 l -10 10 Z"></path>
+                        <path class="color-background opacity-12" d="M 10 42 q -1.65 0 -2.826 -1.176 T 6 38 V 10 q 0 -1.65 1.176 -2.826 T 10 6 h 14 v 4 H 10 v 28 h 14 v 4 H 10 Z m 22 -8 l -2.75 -2.9 l 5.1 -5.1 H 18 v -4 h 16.35 l -5.1 -5.1 L 32 14 l 10 10 l -10 10 Z"></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span class="nav-link-text ms-1" style="color: #67748e">Masuk</span>
+          </button>
+          </form>
+        </li>
+        @endif
+        
       </ul>
     </div>
     <div class="copyright text-center text-xs text-muted mx-4 px-2 mb-2 position-absolute bottom-0">
