@@ -26,7 +26,7 @@
               <td class="text-xs text-dark pe-4 text-bold text-end me-2 text-wrap">{{$schedule['sks']}}</td>
             </tr>
             <tr>
-              <td class="text-xs text-dark px-3 text-wrap">Angkatan/Semester/Jumlah</td>
+              <td class="text-xs text-dark px-3 text-wrap">Semester</td>
               <td class="text-xs text-dark pe-4 text-bold text-end me-2 text-wrap">{{$schedule['mahasiswa']}}</td>
             </tr>
             <tr>

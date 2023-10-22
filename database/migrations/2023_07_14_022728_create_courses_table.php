@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('kode')->unique();
+            $table->string('kode')->nullable();
             $table->string('nama');
             $table->string('sks');
             $table->timestamps();
