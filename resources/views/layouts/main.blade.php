@@ -10,27 +10,25 @@
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
-  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="shortcut icon" href="../assets/img/uho.png" type="image/x-icon">
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+  
+
 </head>
 
-<body class="g-sidenav-show  bg-gray-100">
+<body class="g-sidenav-show bg-gray-100" id="head">
 
   @include('partials.sidebar')
 
-  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <main class="main-content position-relative max-height-vh-100 h-100 ">
     <!-- Navbar -->
     @include('partials.header')
     <!-- End Navbar -->
     <div class="container-fluid py-1 pb-4">
         <div class="row">
-        
             <div class="col-12">
                 @yield('container')
             </div>
@@ -46,7 +44,7 @@
   <script src="../assets/js/plugins/chartjs.min.js"></script>
   <script>
     function scrollToTop() {
-      const element = document.getElementById("navbarBlur");
+      const element = document.getElementById("head");
       element.scrollIntoView(false);
   }
   </script>

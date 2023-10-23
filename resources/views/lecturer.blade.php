@@ -12,7 +12,6 @@
 <div class="card mb-4">
 <div class="d-flex mx-4 mt-4 align-items-center">
   <div class="p-2 flex-grow-1">
-    <h6 class="my-0">Pengajar</h6>
     @if (auth()->user()->level=='admin')
     <span class="mt-2 d-flex align-items-end">
       <a href="/tambah-pengajar">
@@ -76,7 +75,7 @@
                   <div class="text-xs text-wrap word-break">{{$lecturer[$i]['nidn']}}</div>
                 </td>
                 <td>
-                  <div class="text-xs text-wrap word-break">{{$lecturer[$i]['nama']}}</div>
+                  <div class="text-xs text-wrap word-break font-weight-bold">{{$lecturer[$i]['nama']}}</div>
                 </td>
                 @if (auth()->user()->level=='admin')
                 <td class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" scope="col">

@@ -27,6 +27,7 @@ Route::post('/tambah-jadwal',[SchedulesController::class, 'store'])->middleware(
 Route::get('/edit/{id}', [SchedulesController::class, 'edit'])->middleware('admin');
 Route::post('/edit/{id}', [SchedulesController::class, 'update'])->middleware('admin');
 Route::get('/delete/{id}', [SchedulesController::class, 'destroy'])->middleware('admin');
+Route::get('/jadwal/{day}', [SchedulesController::class, 'showByDay']);
 Route::get('/mata-kuliah',[CoursesController::class, 'index'])->name('course');
 Route::get('/cari-mata-kuliah',[CoursesController::class, 'index'])->middleware('admin');
 Route::get('/tambah-mata-kuliah',[CoursesController::class, 'create'])->middleware('admin');

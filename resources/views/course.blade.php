@@ -12,7 +12,6 @@
   <div class="card mb-4">
     <div class="d-flex mx-4 mt-4 align-items-center">
       <div class="p-2 flex-grow-1">
-        <h6 class="my-0">Mata Kuliah</h6>
         @if (auth()->user()->level=='admin')
         <span class="mt-2 d-flex align-items-end">
           <a href="/tambah-mata-kuliah">

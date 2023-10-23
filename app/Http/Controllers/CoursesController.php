@@ -35,7 +35,7 @@ class CoursesController extends Controller
             return view('/guest/course', [
                 'title' => 'Sistem Informasi Penjadwalan Kuliah Teknik Informatika UHO',
                 'sidebar' => 'mata-kuliah',
-                'header' => 'Jadwal Perkuliahan',
+                'header' => 'Mata Kuliah',
                 'courses' => $courses,
                 'query' => ''
             ] 
@@ -114,7 +114,7 @@ class CoursesController extends Controller
         $courses = Courses::where('id',$id)->get()[0];
         return view('pages/courses/edit', [
             'title' => 'Sistem Informasi Penjadwalan Kuliah | Ubah Mata Kuliah',
-            'sidebar' => 'dasbor',
+            'sidebar' => 'mata-kuliah',
             'header' => 'Ubah Mata Kuliah',
             'user' => auth()->user()->name,
             'course' => $courses,

@@ -1,17 +1,19 @@
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-white" id="sidenav-main">
-    <div class="sidenav-header">
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 fixed-start bg-gray-800 overflow-hidden" id="sidenav-main">
+    {{-- <div class="sidenav-header">
       <h6 class="navbar-brand text-center font-weight-bold">
         @if(auth()->user())
           {{$user}}
         @endif
       </h6>
-    </div>
+    </div> --}}
     {{-- <hr> --}}
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-      <ul class="navbar-nav pb-4">
+    <img src="../assets/img/uho.png" class="mx-4 mt-4" alt="" width="80">
+    <div class="mx-4 mt-2 text-white px-2 fs-6">Sistem Informasi<br>Jadwal Perkuliahan</div>
+    <div class="collapse navbar-collapse w-auto mt-2" id="sidenav-collapse-main">
+      <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link  @if($sidebar == 'dasbor') {{'active' }} @endif" href="..">
-            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <a class="nav-link text-gray-400 @if($sidebar == 'dasbor') {{'active' }} @endif" href="..">
+            <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="24px" height="24px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>shop </title>
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -29,9 +31,64 @@
             <span class="nav-link-text ms-1">Jadwal</span>
           </a>
         </li>
+        @if (!auth()->user())
         <li class="nav-item">
-          <a class="nav-link @if($sidebar == 'mata-kuliah') {{'active'}} @endif" href="../mata-kuliah">
-            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <a class="nav-link text-gray-400 @if($sidebar == 'senin') {{'active'}} @endif" href="../jadwal/1">
+            <span class="nav-link-text ms-4">Senin</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'selasa') {{'active'}} @endif" href="../jadwal/2">
+            <span class="nav-link-text ms-4">Selasa</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'rabu') {{'active'}} @endif" href="../jadwal/3">
+            <span class="nav-link-text ms-4">Rabu</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'kamis') {{'active'}} @endif" href="../jadwal/4">
+            <span class="nav-link-text ms-4">Kamis</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'jumat') {{'active'}} @endif" href="../jadwal/5">
+            <span class="nav-link-text ms-4">Jumat</span>
+          </a>
+        </li>
+        @else
+        @if (auth()->user()->level!="admin")
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'senin') {{'active'}} @endif" href="../jadwal/1">
+            <span class="nav-link-text ms-4">Senin</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'selasa') {{'active'}} @endif" href="../jadwal/2">
+            <span class="nav-link-text ms-4">Selasa</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'rabu') {{'active'}} @endif" href="../jadwal/3">
+            <span class="nav-link-text ms-4">Rabu</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'kamis') {{'active'}} @endif" href="../jadwal/4">
+            <span class="nav-link-text ms-4">Kamis</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'jumat') {{'active'}} @endif" href="../jadwal/5">
+            <span class="nav-link-text ms-4">Jumat</span>
+          </a>
+        </li>
+        @endif
+        @endif
+        <li class="nav-item">
+          <a class="nav-link text-gray-400 @if($sidebar == 'mata-kuliah') {{'active'}} @endif" href="../mata-kuliah">
+            <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -50,8 +107,8 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link @if($sidebar == 'pengajar') {{'active'}} @endif" href="../pengajar">
-             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+          <a class="nav-link text-gray-400 @if($sidebar == 'pengajar') {{'active'}} @endif" href="../pengajar">
+             <div class="icon icon-shape icon-sm shadow border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -71,10 +128,10 @@
         </li>
         @if(auth()->user())
         <li class="nav-item">
-          <form action="/logout" method="post" class="nav-link d-flex justify-content-start">
+          <form action="/logout" method="post" class="nav-link text-gray-400d-flex justify-content-start">
             @csrf
             <button type="submit" class="bg-transparent border-0 p-0 me-2 d-flex align-items-center">
-            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+            <div class="icon icon-shape icon-sm shadow border-radius-md text-center d-flex align-items-center justify-content-center me-2">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -95,9 +152,9 @@
         </li>
         @else
         <li class="nav-item">
-          <form action="/login" method="get" class="nav-link d-flex justify-content-start">
+          <form action="/login" method="get" class="nav-link text-gray-400d-flex justify-content-start">
             <button type="submit" class="bg-transparent border-0 p-0 me-2 d-flex align-items-center">
-            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center d-flex align-items-center justify-content-center me-2">
+            <div class="icon icon-shape icon-sm shadow border-radius-md text-center d-flex align-items-center justify-content-center me-2">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

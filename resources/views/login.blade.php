@@ -2,7 +2,7 @@
 
 @section('container')
 
-<div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+<div class="col-xl-4 col-lg-5 ms-3 col-md-6 d-flex flex-column mx-auto">
     <div class="card card-plain mt-2">
       <div class="card-header pb-0 text-left bg-transparent">
         <img src="../assets/img/uho.png" alt="" class="logo">

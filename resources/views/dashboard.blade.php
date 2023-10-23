@@ -11,9 +11,7 @@
     </div>  
     @endif
     <div class="card daily-schedule w-100">
-      <div class="card-header d-flex pb-0 align-items-top">
         <div class="p-2 flex-grow-1">
-          <h6 class="my-0">Jadwal Perkuliahan</h6>
           <span class="mt-2 d-flex align-items-end">
             <a href="/tambah-jadwal">
               <button class="btn btn-primary py-2 px-3"><i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -51,14 +49,21 @@
   <div class="card mb-4 d-flex w-100 align-items-center card mb-4 d-flex justify-content-center">
     <div class="daily-schedule w-100">
       <div class="card-header pb-0">
-        <h6 class="my-0" id="">Jadwal hari ini</h6>
+        <h6 class="my-0" id="">Jadwal hari @if($date!=""){{'ini'}}
+          @else{{$today_schedule ? $today_schedule[0]['hari'] : 'ini'}}
+        @endif</h6>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="px-4 mt-1">
           @if ($today_schedule)
-            <div class="text-md mb-2">{{$today_schedule[0]['hari']}}</div>
+            @if($date!="")
+            <div class="text-md mb-2">{{$today_schedule[0]['hari']}}, {{$date}}</div>
+            @endif
+            @include('partials/schedule_legend')
               @foreach ($today_schedule as $schedule)
+              <div class="accordion accordion-flush" id="accordionFlushExample">
                 @include('partials/schedule_item') 
+              </div>
               @endforeach
             </div>
           @else
@@ -67,9 +72,9 @@
           @endif
         </div>
       </div>
-      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" id="collapse-btn" aria-expanded="false" aria-controls="collapseExample" onclick="scrollToTop()">
+      {{-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" id="collapse-btn" aria-expanded="false" aria-controls="collapseExample" onclick="scrollToTop()">
       Tampilkan semua jadwal
-      </button>
+      </button> --}}
   </div>
 </div>
 <div class="collapse" id="collapseExample">

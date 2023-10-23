@@ -3,10 +3,7 @@
 @section('container')
   <div class="card mb-4">
     <div class="d-flex mx-4 align-items-center">
-      <div class="px-2 flex-grow-1">
-        <h6 class="my-0">Mata Kuliah</h6>
-      </div>
-      <div class="mt-4">
+      <div class="mt-4 flex-grow-1">
         <form action="/cari-mata-kuliah" method="post">
           @csrf
           <div class="input-group mb-3">

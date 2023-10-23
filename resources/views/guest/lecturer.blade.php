@@ -3,15 +3,12 @@
 @section('container')
 <div class="card mb-4">
 <div class="d-flex mx-4 align-items-center">
-      <div class="px-2 flex-grow-1">
-        <h6 class="my-0">Pengajar</h6>
-      </div>
-      <div class="mt-4">
+      <div class="mt-4 flex-grow-1">
         <form action="/cari-pengajar" method="post">
           @csrf
           <div class="input-group mb-3">
             <input type="text" name="search"
-            value="{{$query}}"class="form-control p-2 h-100 border-end-0 rounded-end-0" placeholder="Cari jadwal..." aria-label="Recipient's username" aria-describedby="button-addon2">
+            value="{{$query}}"class="form-control p-2 h-100 border-end-0 rounded-end-0" placeholder="Cari pengajar..." aria-label="Recipient's username" aria-describedby="button-addon2">
             <button class="btn btn-outline-primary rounded-2 px-2 py-2 ms-2"><i class="fa fa-search" aria-hidden="true"></i></button>
           </div>
         </form>
@@ -50,7 +47,7 @@
                   <div class="text-xs text-wrap word-break">{{$lecturer[$i]['nidn']}}</div>
                 </td>
                 <td>
-                  <div class="text-xs text-wrap word-break">{{$lecturer[$i]['nama']}}</div>
+                  <div class="text-xs text-wrap word-break font-weight-bold">{{$lecturer[$i]['nama']}}</div>
                 </td>
             @endfor
           </tbody>
